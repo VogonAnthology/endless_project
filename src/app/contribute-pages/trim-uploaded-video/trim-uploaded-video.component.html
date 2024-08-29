@@ -1,0 +1,89 @@
+<div class="fullscreen-container min-vw-100 d-flex flex-column align-items-center justify-content-evenly video-editor">
+  <div
+    class="container-sm video-player-container"
+  >
+    <video #videoPlayer class="video-js vjs-default-skin" controls></video>
+    <div class="video-info">{{ videoFile.name }}</div>
+  </div>
+
+  <div
+    class="control-bars"
+    (mousedown)="onHandleProgressMouseDown($event)"
+    (mouseover)="onHandleProgressMouseOver($event)"
+    (mouseleave)="onHandleProgressMouseLeave()"
+  >
+    <div class="thumbnails">
+      <canvas #thumbnailCanvas class="thumbnail-canvas"></canvas>
+      <div class="mask left" [ngStyle]="{ width: leftMaskWidth }"></div>
+      <div class="mask right" [ngStyle]="{ width: rightMaskWidth }"></div>
+    </div>
+
+    <ng-template #tipContent>
+      <div class="tooltip-content">
+        <span>{{ tooltipContent }}</span>
+      </div>
+    </ng-template>
+
+    <div
+      class="progress-output"
+      [ngStyle]="{ left: progressOutputLeft }"
+      placement="top"
+      [ngbTooltip]="tipContent"
+      [autoClose]="false"
+      triggers="manual"
+      #t="ngbTooltip"
+    >
+      <div class="progress-line"></div>
+    </div>
+    <div
+      #progressBarPreview
+      class="progress-output"
+      [ngStyle]="{ left: progressBarPreviewLeft }"
+    >
+      <div class="progress-line">
+        <div class="position-absolute top-0 right-0 progress-content">
+          {{ progressBarPreviewContent }}
+        </div>
+      </div>
+    </div>
+    <div
+      class="control-bars-wrapper"
+      [ngStyle]="{ left: leftHandlePosition, right: rightHandlePosition }"
+    >
+      <div
+        #cbStart
+        class="control-bar cb-left"
+        (mousedown)="onHandleMouseDown($event, 'start')"
+        [attr.data-content]="startTimeString"
+      ></div>
+      <div
+        #cbEnd
+        class="control-bar cb-right"
+        (mousedown)="onHandleMouseDown($event, 'end')"
+        [attr.data-content]="endTimeString"
+      ></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="play-button" (click)="togglePlay()">
+      <i *ngIf="!isPlaying; else pauseIcon">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="play-arrow"
+          fontIcon="play_arrow"
+        ></mat-icon>
+      </i>
+      <ng-template #pauseIcon>
+        <i>
+          <mat-icon
+            aria-hidden="false"
+            aria-label="pause"
+            fontIcon="pause"
+          ></mat-icon>
+        </i>
+      </ng-template>
+    </button>
+    <button class="save-button" (click)="trimVideo()">Enregistrer</button>
+  </div>
+</div>

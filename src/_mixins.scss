@@ -1,0 +1,6 @@
+$header-height-large: 56px;
+$header-height-small: 41.6px;
+
+@mixin full-height-minus-header($header-height) {
+  height: calc(100vh - #{$header-height});
+}

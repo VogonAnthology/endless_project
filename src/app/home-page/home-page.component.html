@@ -1,0 +1,31 @@
+<main class="d-flex">
+  <div class="p-5 text-nowrap d-flex flex-column flex-grow-1">
+    <p>Duration {{ videoDuration }}</p>
+    <p>Contributors {{ contributorsCount }}</p>
+    <div class="flex-grow-1 text-wrap">
+      <app-videos-explore-scrolldown></app-videos-explore-scrolldown>
+    </div>
+  </div>
+  <div class="container-sm p-5 flex-grow-1 row justify-content-md-center">
+    <app-vjs-player
+      [options]="{
+        autoplay: true,
+        aspectRatio: '16:9',
+        controls: true,
+        sources: [
+          {
+            src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            type: 'video/mp4'
+          }
+        ]
+      }"
+    ></app-vjs-player>
+    <button
+      type="button"
+      class="btn btn-primary w-25 mt-4"
+      [routerLink]="['/upload-video-page']"
+    >
+      Participer au projet
+    </button>
+  </div>
+</main>
