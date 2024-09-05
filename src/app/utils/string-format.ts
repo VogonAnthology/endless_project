@@ -8,7 +8,27 @@ export class StringFormat {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  static getTimeToString(time: number): string {
-    return (time / 100).toFixed(2).replace('.', ':');
+  static getDurationToString(
+    time: number,
+    milliseconds: boolean = false
+  ): string {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    const millis = milliseconds
+      ? `.${Math.floor((time % 1) * 100)
+          .toString()
+          .padStart(2, '0')}`
+      : '';
+    return `${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}${millis}`;
+  }
+
+  static getDurationToNumber(time: string): number {
+    const minutes = parseInt(time.substring(0, 2), 10);
+    const seconds = parseInt(time.substring(2, 4), 10);
+    const milliseconds = parseInt(time.substring(4, 6), 10);
+    const totalSeconds = minutes * 60 + seconds + milliseconds / 100;
+    return totalSeconds;
   }
 }

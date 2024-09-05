@@ -20,17 +20,31 @@ import { NgbTooltip, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { VideoService } from '../../services/uploading-video/video.service';
 import { StringFormat } from '../../utils/string-format';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-trim-uploaded-video',
   standalone: true,
-  imports: [FormsModule, CommonModule, MatIconModule, NgbTooltipModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    MatIconModule,
+    NgbTooltipModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './trim-uploaded-video.component.html',
   styleUrl: './trim-uploaded-video.component.scss',
+  styles:
+    '.tooltip-progress.tooltip-inner { background-color: #000; color: #fff; }',
 })
 export class TrimUploadedVideoComponent implements OnInit {
   @ViewChild('videoPlayer', { static: true }) videoPlayer!: ElementRef;
-  @ViewChild('thumbnailCanvas', { static: true }) thumbnailCanvas!: ElementRef;
+  @ViewChild('thumbnailTimeline', { static: true })
+  thumbnailTimeline!: ElementRef;
+  @ViewChild('thumbnailCanvas', { static: true })
+  thumbnailCanvas!: ElementRef;
   @ViewChild('t', { static: true }) tooltip!: NgbTooltip;
   @ViewChild('progressBarPreview', { static: true })
   progressBarPreview!: ElementRef;
@@ -38,6 +52,8 @@ export class TrimUploadedVideoComponent implements OnInit {
   @ViewChild('cbEnd', { static: true }) cbEnd!: ElementRef;
   @Input({ required: true }) videoFile!: File;
   private _plan!: string;
+  private previousValue: Map<string, Map<string, any>> = new Map();
+  isMuted: any;
 
   @Input()
   set plan(value: string) {
@@ -51,21 +67,37 @@ export class TrimUploadedVideoComponent implements OnInit {
   maxSequenceDuration!: number;
 
   player!: Player;
-  sequenceDuration: number = 0;
   videoDuration: number = 0;
+  sequenceDurationString: string = '0:00.00';
   startTime: number = 0;
   endTime: number = 0;
   startTimeString: string = '0:00';
-  endTimeString: string = '0:00';
+  endTimeString: string = '0:00.00';
   isPlaying: boolean = false;
   ffmpeg = new FFmpeg();
   draggingHandle: 'start' | 'end' | 'progress' | null = null;
   displayProgressBarPreview: boolean = false;
+  progressBarDisplayed: boolean = false;
   tooltipContent: string = '0:00';
   progressBarPreviewContent: string = '0:00';
   progressBarPreviewLeft: string = '0%';
 
-  constructor(private videoService: VideoService, private router: Router) {}
+  constructor(private videoService: VideoService, private router: Router) {
+    this.previousValue.set(
+      'start',
+      new Map<string, any>([
+        ['value', '00:00.00'],
+        ['selectionStart', 0],
+      ])
+    );
+    this.previousValue.set(
+      'end',
+      new Map<string, any>([
+        ['value', '00:00.00'],
+        ['selectionStart', 0],
+      ])
+    );
+  }
 
   initVideoPlayer() {
     const videoUrl = URL.createObjectURL(this.videoFile);
@@ -84,9 +116,11 @@ export class TrimUploadedVideoComponent implements OnInit {
 
     this.player.on('loadedmetadata', () => {
       this.videoDuration = this.player.duration() ?? 0;
-      this.sequenceDuration = this.player.duration() ?? 0;
-      this.endTime = Math.min(this.sequenceDuration, this.maxSequenceDuration);
+      this.endTime = Math.min(this.videoDuration, this.maxSequenceDuration);
+      this.endTimeString = StringFormat.getDurationToString(this.endTime, true);
+      this.setSequenceDuration();
       this.generateThumbnails();
+      this.tooltip.tooltipClass = 'tooltip-progress';
       this.tooltip.open();
     });
 
@@ -111,7 +145,7 @@ export class TrimUploadedVideoComponent implements OnInit {
   }
 
   updateTooltip() {
-    this.tooltipContent = StringFormat.getTimeToString(
+    this.tooltipContent = StringFormat.getDurationToString(
       this.player.currentTime() ?? 0
     );
   }
@@ -128,11 +162,11 @@ export class TrimUploadedVideoComponent implements OnInit {
   }
 
   get leftMaskWidth(): string {
-    return `${(this.startTime / this.sequenceDuration) * 100}%`;
+    return `${(this.startTime / this.videoDuration) * 100}%`;
   }
 
   get rightMaskWidth(): string {
-    return `${(1 - this.endTime / this.sequenceDuration) * 100}%`;
+    return `${(1 - this.endTime / this.videoDuration) * 100}%`;
   }
 
   get leftHandlePosition(): string {
@@ -150,18 +184,36 @@ export class TrimUploadedVideoComponent implements OnInit {
   }
 
   onHandleProgressMouseOver(event: MouseEvent) {
-    if (this.draggingHandle === 'start' || this.draggingHandle === 'end') {
-      return;
-    }
-    this.displayProgressBarPreview = true;
-    this.progressBarPreview.nativeElement.classList.remove('invisible');
-    this.progressBarPreview.nativeElement.classList.add('visible');
+    if (this.displayProgressBarPreview) this.showProgressBarPreview(event);
   }
 
   onHandleProgressMouseLeave() {
+    this.hideProgressBarPreview();
+  }
+
+  onControlBarMouseOver() {
+    this.hideProgressBarPreview();
     this.displayProgressBarPreview = false;
+  }
+
+  onControlBarMouseLeave(event: MouseEvent) {
+    if (!this.draggingHandle) {
+      this.showProgressBarPreview(event);
+      this.displayProgressBarPreview = true;
+    }
+  }
+
+  hideProgressBarPreview() {
+    this.progressBarDisplayed = false;
     this.progressBarPreview.nativeElement.classList.remove('visible');
     this.progressBarPreview.nativeElement.classList.add('invisible');
+  }
+
+  showProgressBarPreview(event: MouseEvent) {
+    this.progressBarDisplayed = true;
+    this.onMouseMove(event);
+    this.progressBarPreview.nativeElement.classList.remove('invisible');
+    this.progressBarPreview.nativeElement.classList.add('visible');
   }
 
   onHandleProgressMouseDown(event: MouseEvent) {
@@ -179,26 +231,26 @@ export class TrimUploadedVideoComponent implements OnInit {
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
-    if (this.draggingHandle || this.displayProgressBarPreview) {
+    if (this.draggingHandle || this.progressBarDisplayed) {
       const rect = (
-        this.thumbnailCanvas.nativeElement as HTMLCanvasElement
+        this.thumbnailTimeline.nativeElement as HTMLCanvasElement
       ).getBoundingClientRect();
       const percentage = (event.clientX - rect.left) / rect.width;
-      let newTime: number = percentage * this.sequenceDuration;
+      let newTime: number = percentage * this.videoDuration;
 
       if (this.draggingHandle) {
-        this.progressBarPreview.nativeElement.classList.remove('visible');
-        this.progressBarPreview.nativeElement.classList.add('invisible');
         if (this.draggingHandle === 'start') {
           this.cbEnd.nativeElement.classList.remove('active');
           this.cbStart.nativeElement.classList.add('active');
           this.setStartTime(newTime);
           this.updateVideoTime(this.startTime);
+          this.setSequenceDuration();
         } else if (this.draggingHandle === 'end') {
           this.cbStart.nativeElement.classList.remove('active');
           this.cbEnd.nativeElement.classList.add('active');
           this.setEndTime(newTime);
           this.updateVideoTime(this.endTime);
+          this.setSequenceDuration();
         } else if (this.draggingHandle === 'progress') {
           if (newTime < this.startTime) {
             this.setStartTime(newTime);
@@ -208,20 +260,30 @@ export class TrimUploadedVideoComponent implements OnInit {
           this.updateVideoTime(newTime);
         }
       } else {
-        this.progressBarPreviewContent = StringFormat.getTimeToString(newTime);
+        this.progressBarPreviewContent =
+          StringFormat.getDurationToString(newTime);
         this.progressBarPreviewLeft = `${percentage * 100}%`;
       }
     }
   }
 
+  setSequenceDuration() {
+    this.sequenceDurationString = StringFormat.getDurationToString(
+      this.endTime - this.startTime
+    );
+  }
+
   setEndTime(newTime: number) {
     this.endTime = Math.max(newTime, this.startTime + 1);
-    this.endTime = Math.min(this.endTime, this.sequenceDuration);
+    this.endTime = Math.min(this.endTime, this.videoDuration);
     if (this.endTime - this.startTime > this.maxSequenceDuration) {
       this.startTime = this.endTime - this.maxSequenceDuration;
-      this.startTimeString = StringFormat.getTimeToString(this.startTime);
+      this.startTimeString = StringFormat.getDurationToString(
+        this.startTime,
+        true
+      );
     }
-    this.endTimeString = StringFormat.getTimeToString(this.endTime);
+    this.endTimeString = StringFormat.getDurationToString(this.endTime, true);
   }
 
   setStartTime(newTime: number) {
@@ -229,15 +291,116 @@ export class TrimUploadedVideoComponent implements OnInit {
     this.startTime = Math.max(this.startTime, 0);
     if (this.endTime - this.startTime > this.maxSequenceDuration) {
       this.endTime = this.startTime + this.maxSequenceDuration;
-      this.endTimeString = StringFormat.getTimeToString(this.endTime);
+      this.endTimeString = StringFormat.getDurationToString(this.endTime, true);
     }
-    this.startTimeString = StringFormat.getTimeToString(this.startTime);
+    this.startTimeString = StringFormat.getDurationToString(
+      this.startTime,
+      true
+    );
   }
 
-  @HostListener('document:mouseup')
-  onMouseUp() {
+  onBeforeInput(event: InputEvent, isStart: boolean): void {
+    const key = isStart ? 'start' : 'end';
+    const targetElement = event.target as HTMLInputElement;
+
+    this.previousValue.get(key)!.set('value', targetElement.value);
+    this.previousValue
+      .get(key)!
+      .set('selectionStart', targetElement.selectionStart ?? 0);
+  }
+
+  onInputChange(event: any, isStart: boolean): void {
+    const previousValue = this.previousValue.get(isStart ? 'start' : 'end')!;
+    let input = previousValue.get('value');
+    let cursorPosition = previousValue.get('selectionStart');
+
+    if (event.inputType === 'deleteContentBackward' && cursorPosition > 0) {
+      let deletedChar: string;
+      do {
+        deletedChar = input[cursorPosition - 1];
+        input =
+          input.slice(0, cursorPosition - 1) + input.slice(cursorPosition);
+        cursorPosition--;
+      } while (!/^\d$/.test(deletedChar) && cursorPosition > 0);
+    } else if (event.data) {
+      const formattedPreviousValue = input.replace(/\D/g, '');
+      console.log(formattedPreviousValue);
+      console.log(formattedPreviousValue.length);
+      if (formattedPreviousValue.length < 6) {
+        while (cursorPosition > 0 && !/^\d$/.test(input[cursorPosition - 1])) {
+          cursorPosition--;
+        }
+        input =
+          input.slice(0, cursorPosition) +
+          event.data +
+          input.slice(
+            input[cursorPosition] === '_' ? cursorPosition + 1 : cursorPosition
+          );
+        cursorPosition++;
+        if (/[^(\d|_)]/.test(input[cursorPosition])) {
+          console.log('here');
+          cursorPosition++;
+        }
+      }
+    }
+    input = input.replace(/\D/g, '');
+
+    if (input.length === 6) {
+      const newTime = StringFormat.getDurationToNumber(input);
+      if (isStart) {
+        this.setStartTime(newTime);
+      } else {
+        this.setEndTime(newTime);
+      }
+      this.updateVideoTime(newTime);
+      this.setSequenceDuration();
+      input = StringFormat.getDurationToString(newTime, true);
+    } else {
+      if (input.length === 5) {
+        input = `${input.slice(0, 2)}:${input.slice(2, 4)}.${input.slice(4)}_`;
+      } else if (input.length === 4) {
+        input = `${input.slice(0, 2)}:${input.slice(2, 4)}.__`;
+      } else if (input.length === 3) {
+        input = `${input.slice(0, 2)}:${input.slice(2)}_.__`;
+      } else if (input.length === 2) {
+        input = `${input}:__.__`;
+      } else if (input.length === 1) {
+        input = `${input}_:__.__`;
+      } else {
+        input = '__:__.__';
+      }
+    }
+
+    event.target.value = input;
+    event.target.selectionStart = cursorPosition;
+    event.target.selectionEnd = cursorPosition;
+  }
+
+  @HostListener('document:mouseup', ['$event'])
+  onMouseUp(event: MouseEvent) {
     this.draggingHandle = null;
     this.updateVideoTime(this.player.currentTime() ?? 0);
+    this.displayProgressBarPreview = true;
+    if (this.isMouseOverTimelineControlBar(event)) {
+      this.showProgressBarPreview(event);
+    }
+  }
+
+  isMouseOverTimelineControlBar(event: MouseEvent): boolean {
+    const controlBarRect = (
+      this.thumbnailTimeline.nativeElement as HTMLCanvasElement
+    ).getBoundingClientRect();
+
+    if (
+      event.clientX >= controlBarRect.left &&
+      event.clientX <= controlBarRect.right &&
+      event.clientY >= controlBarRect.top &&
+      event.clientY <= controlBarRect.bottom
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   updateVideoTime(newTime: number) {
@@ -252,6 +415,11 @@ export class TrimUploadedVideoComponent implements OnInit {
     }
   }
 
+  toggleMute() {
+    this.isMuted = !this.isMuted;
+    this.player.muted(this.isMuted);
+  }
+
   async generateThumbnails() {
     const canvas = this.thumbnailCanvas.nativeElement;
     const context = canvas.getContext('2d');
@@ -259,7 +427,7 @@ export class TrimUploadedVideoComponent implements OnInit {
 
     //TODO: Adapter le nombre de miniatures à la taille de l'écran
     const thumbnailCount = 10;
-    const interval = this.sequenceDuration / thumbnailCount;
+    const interval = this.videoDuration / thumbnailCount;
 
     for (let i = 0; i < thumbnailCount; i++) {
       await this.seekToTime(videoElement, i * interval);
@@ -283,10 +451,10 @@ export class TrimUploadedVideoComponent implements OnInit {
 
   onTimeLineClick(event: MouseEvent) {
     const rect = (
-      this.thumbnailCanvas.nativeElement as HTMLCanvasElement
+      this.thumbnailTimeline.nativeElement as HTMLCanvasElement
     ).getBoundingClientRect();
     const percentage = (event.clientX - rect.left) / rect.width;
-    const newTime = percentage * this.sequenceDuration;
+    const newTime = percentage * this.videoDuration;
     if (newTime < this.startTime) {
       this.setStartTime(newTime);
     } else if (newTime > this.endTime) {

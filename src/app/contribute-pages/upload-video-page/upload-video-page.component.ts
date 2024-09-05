@@ -2,6 +2,7 @@ import {
   Component,
   ComponentRef,
   ElementRef,
+  OnInit,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -17,7 +18,7 @@ import { StringFormat } from '../../utils/string-format';
   templateUrl: './upload-video-page.component.html',
   styleUrl: './upload-video-page.component.scss',
 })
-export class UploadVideoPageComponent {
+export class UploadVideoPageComponent implements OnInit {
   @ViewChild('videoThumbnailCanvas')
   thumbnailCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('uploadContainer') uploadContainer!: ElementRef;
@@ -37,6 +38,11 @@ export class UploadVideoPageComponent {
   private trimComponentRef?: ComponentRef<TrimUploadedVideoComponent>;
   private choosePlanComponentRef?: ComponentRef<ChooseSubmitPlanPageComponent>;
 
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.addChooseSubmitPlanComponent();
+  }
   // ngAfterViewInit(): void {
   //   this.scrollContainer.nativeElement.addEventListener(
   //     'scroll',
@@ -102,7 +108,7 @@ export class UploadVideoPageComponent {
     video.src = URL.createObjectURL(file);
     await this.loadVideo(video);
 
-    this.fileDuration = StringFormat.getTimeToString(video.duration);
+    this.fileDuration = StringFormat.getDurationToString(video.duration);
     this.fileSizeFormatted = StringFormat.formatBytes(file.size);
 
     canvas.width = video.videoWidth / 4;
@@ -188,7 +194,7 @@ export class UploadVideoPageComponent {
   }
 
   addChooseSubmitPlanComponent() {
-    this.choosePlanContainer.clear();
+    // this.choosePlanContainer.clear();
     this.choosePlanComponentRef = this.choosePlanContainer.createComponent(
       ChooseSubmitPlanPageComponent
     );

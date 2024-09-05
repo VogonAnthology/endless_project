@@ -57,8 +57,10 @@
       </button>
     </div>
   </div>
-
-  <section id="section0" class="fullscreen-container align-items-center">
+  <section id="section0" class="fullscreen-container">
+    <div #choosePlanContainer></div>
+  </section>
+  <section id="section1" class="fullscreen-container align-items-center">
     <div #uploadContainer class="upload-container">
       @if (!file) {
       <h1 class="title">Upload Your Video</h1>
@@ -114,10 +116,7 @@
       }
     </div>
   </section>
-  <section id="section1" class="fullscreen-container">
-    <div #choosePlanContainer></div>
-  </section>
-  <section id="section2" class="fullscreen-container d-flex">
+  <section id="section2" class="fullscreen-cotainer d-flex">
     <div #trimContainer></div>
   </section>
 </main>
