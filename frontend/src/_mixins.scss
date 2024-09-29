@@ -1,0 +1,8 @@
+@mixin full-height-minus-header($header-height) {
+    height: calc(100vh - #{$header-height});
+  }
+
+@mixin gradient-outline($background-color) {
+  background: linear-gradient($background-color, $background-color) padding-box,
+              var(--red-to-pink-to-purple-horizontal-gradient) border-box !important;
+}

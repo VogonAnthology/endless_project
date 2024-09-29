@@ -1,0 +1,125 @@
+<main #scrollContainer class="upload-video-page disable-scroll">
+  <div id="sectionProgressBar"
+    class="position-fixed top-50 end-0 translate-middle-y me-5 list-group"
+    style="height: 250px"
+  >
+    <div class="position-relative" style="height: 100%">
+      <div
+        class="progress h-100"
+        role="progressbar"
+        aria-label="Progress"
+        aria-valuenow="20"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        style="
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 5px;
+        "
+      >
+        <div class="progress-bar" [style.height]="formProgress + '%'" style="width: 100%"></div>
+      </div>
+
+      <button
+        type="button"
+        class="position-absolute start-50 translate-middle rounded-circle"
+        style="width: 40px; height: 40px; top: 0"
+        [class.active]="activeSections >= 0"
+        [class.focused]="currentSection === 0"
+        (click)="scrollTo('section0')"
+      >
+        1
+      </button>
+      <button
+        type="button"
+        class="position-absolute start-50 translate-middle rounded-circle"
+        style="width: 40px; height: 40px; top: 50%"
+        [class.active]="activeSections >= 1"
+        [class.focused]="currentSection === 1"
+        [class.disabled]="uploadContainerInitialized === false"
+        (click)="scrollTo('section1')"
+      >
+        2
+      </button>
+      <button
+        type="button"
+        class="position-absolute start-50 translate-middle rounded-circle"
+        style="width: 40px; height: 40px; top: 100%"
+        [class.active]="activeSections >= 2"
+        [class.focused]="currentSection === 2"
+        [class.disabled]="trimContainerInitialized === false"
+        (click)="scrollTo('section2')"
+      >
+        3
+      </button>
+    </div>
+  </div>
+  <section id="section0" class="fullscreen-container">
+    <div #choosePlanContainer></div>
+  </section>
+  <section id="section1" class="fullscreen-container align-items-center">
+    <div #uploadContainer class="upload-container d-flex flex-column">
+      @if (!file) {
+      <h3>Upload Your Video</h3>
+      <div
+        class="drag-drop-area"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+      >
+        <input
+          type="file"
+          id="videoFile"
+          class="file-input"
+          accept="video/*"
+          (change)="onFileSelected($event)"
+          hidden
+        />
+        <label for="videoFile" class="mb-5">
+          <a class="upload-button gradient-background">Choose a File</a> 
+        </label>
+        <p class="file-info fw-medium mb-5">
+          OR DRAG AND DROP YOUR FILE HERE
+        </p>
+          <p class="file-info text-start">
+            Max file size : 1gb
+            <br />
+            Supported formats : mp4, mov, avi, mkv, webm
+          </p>
+
+
+      </div>
+      } @else {
+      <div>
+        <h3>Your Video</h3>
+        <div class="video-preview">
+          <div class="video-thumbnail">
+            <canvas #videoThumbnailCanvas class="thumbnail-canvas"></canvas>
+            <button class="btn btn-danger rounded-circle" (click)="onCancel()">
+              <mat-icon
+                aria-hidden="false"
+                aria-label="play-arrow"
+                fontIcon="close"
+              ></mat-icon>
+            </button>
+          </div>
+          <div class="video-info">
+            <p class="file-name">{{ file.name }}</p>
+            <p class="file-size">{{ fileSizeFormatted }}</p>
+            <p class="file-duration">{{ fileDuration }} min</p>
+          </div>
+        </div>
+        <div class="video-actions">
+          
+        </div>
+      </div>
+      }
+    </div>
+  </section>
+  <section id="section2" class="fullscreen-container d-flex">
+    <div #trimContainer></div>
+  </section>
+</main>

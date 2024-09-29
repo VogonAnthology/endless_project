@@ -1,0 +1,37 @@
+.choose-plan {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+  
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  
+      .option-card {
+        padding: 20px;
+        color: var(--text-primary-color);
+        border-radius: var(--md);
+        box-shadow: 2px 2px 10px rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+  
+        h2 {
+          margin-bottom: 10px;
+          font-size: 1.5rem;
+        }
+  
+        p {
+          margin-bottom: 20px;
+          font-size: 1rem;
+          color: var(--text-secondary-color);
+        }
+      }
+    }
+  }
+  

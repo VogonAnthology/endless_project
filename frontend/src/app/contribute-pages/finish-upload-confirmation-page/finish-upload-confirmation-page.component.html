@@ -1,0 +1,38 @@
+<main>
+  <div class="fullscreen-container d-flex flex-column justify-content-center align-items-center">
+    <h1 class="text-center mb-5">Final Step - Preview</h1>
+    <div class="row h-auto w-100 justify-content-center align-items-center">
+      <div class="col-lg-6 video-player-container w-100">
+        <div class="w-100">
+          <app-vjs-player [customPlayer]="true" [title]="title" [sources]="[
+          {
+            src: videoUrl,
+            type: (video?.videoBlob?.type ?? 'application/x-mpegURL'),
+          }
+        ]"></app-vjs-player>
+        </div>
+      </div>
+      <div class="col-lg-4 mt-3">
+        <div class="p-4 shadow bg-white rounded">
+          @if (video?.plan === 'contest') {
+            <!-- @if (false) { -->
+            <p class="text-muted">Please remember that the video must follow community guidelines.</p>
+            <p class="text-muted">You have chosen to compete for this week's video election. The voting phase starts on {{nextVotingStartDayString}} and will end on {{nextVotingEndDayString}}.</p>
+            <p class="text-muted">Good luck and don't forget to vote !</p>
+            <button type="button" class="btn btn-primary mt-3 w-100" (click)="uploadVideo()">
+              Confirm and Submit Video
+            </button>
+          } @else {
+            <p class="text-muted">The price per minute of video is incremential to prioritize contest videos. First video slot was sold at 1$ and has been increased by 1$ for the second slot, and so on.</p>
+            <p class="text-muted">Current price is now at : {{ currentPrice }}$</p>
+            <p class="text-muted">Please remember that the video must follow our community guideline - everything is allowed except explicit content.</p>
+            <!-- <p class="text-muted">Thank you for your contribution! Your video will be reviewed by our team and will be published soon.</p> -->
+            <button type="button" class="btn btn-primary mt-3 w-100" (click)="uploadVideo()">
+              Confirm and Proceed to Payment
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

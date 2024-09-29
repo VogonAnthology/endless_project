@@ -1,0 +1,14 @@
+<div *ngIf="show" class="custom-modal">
+    <div class="modal-content">
+        <div class="d-flex flex-column align-items-center bg-transparent">
+          <div class="container-sm bg-transparent">
+            <ngb-progressbar class="mb-3" type="primary" textType="white" [value]="processingProgress" [showValue]="true" />
+          </div>
+          <div class="mt-3 text-center text-white">
+            {{message}}
+            <br>
+            {{message2}}
+          </div>
+        </div>
+      </div>
+</div>

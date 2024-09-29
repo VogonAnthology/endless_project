@@ -1,0 +1,38 @@
+<div class="login-modal">
+    <h2>Login</h2>
+    <form (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="email" name="email" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" [(ngModel)]="password" name="password" required />
+      </mat-form-field>
+  
+      <div class="form-links">
+        <a href="#">Forgot your password?</a>
+      </div>
+  
+      <button type="submit" class="gradient-outline bg-sec full-width mb-3">Sign In</button>
+      
+      <div class="form-links">
+        <a href="#">Create account</a>
+      </div>
+  
+      <p class="social-text">OR SIGN IN WITH YOUR SOCIAL MEDIA ACCOUNT</p>
+  
+      <div class="social-buttons">
+        <button mat-icon-button aria-label="Google login">
+          <img src="assets/icons/google.png" height="48px" width='48px' alt="Google" class="social-icon">
+        </button>
+        <button mat-icon-button aria-label="Twitter login">
+          <img src="assets/icons/x.svg" height="48px" width='48px' alt="X" class="social-icon">
+        </button>
+        <button mat-icon-button aria-label="Facebook login">
+            <img src="assets/icons/facebook.png" height="48px" width='48px' alt="Facebook" class="social-icon">
+          </button>
+      </div>
+    </form>
+  </div>
+  

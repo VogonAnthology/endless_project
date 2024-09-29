@@ -1,0 +1,31 @@
+<main class="px-3">
+  <div class="row pt-5 px-3 fullscreen-container">
+    <div class="col-lg-8 h-100 d-flex flex-column justify-content-around">
+      <app-vjs-player [sources]="[{
+          src: 'https://www.w3schools.com/tags/mov_bbb.mp4',
+          type: 'video/mp4'
+        }]" [autoplay]="true" class="w-100 rounded-container"></app-vjs-player>
+      <div class="row flex-grow-1 title-text mt-2 align-items-center">
+        <div class="col-lg-7 d-flex flex-column justify-content-around align-items-center">
+          <p><span class="gradient-text fs-1">{{hours}}</span>h <span class="gradient-text fs-1">{{minutes}}</span>min
+            <span class="gradient-text fs-1">{{seconds}}</span>sec
+            <span class="mx-3 fs-1 text-secondary-emphasis">|</span>
+            <span class="gradient-text fs-1">{{ contributorsCount }}</span> winners</p>
+        </div>
+        <div class="col-lg-2 pb-1">
+          <button class="gradient-outline bg-prim" [routerLink]="['/upload-video-page']">
+            Participate 🔥
+          </button>
+        </div>
+        <div class="col-lg-3 pb-1">
+          <button class="gradient-outline bg-prim" [routerLink]="['/upload-video-page']">
+            Weekly contest 🏆
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 h-100 pt-2">
+      <app-videos-explore-scrolldown></app-videos-explore-scrolldown>
+    </div>
+  </div>
+</main>

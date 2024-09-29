@@ -1,0 +1,19 @@
+.title-text p {
+font-weight: 500;
+font-size: var(--lg);
+}
+
+main {
+    background-color: black;
+
+    .fullscreen-container {
+        overflow: hidden;
+
+        .rounded-container {
+            border-radius: 1rem;
+            overflow: hidden;
+       }
+
+
+    }
+}

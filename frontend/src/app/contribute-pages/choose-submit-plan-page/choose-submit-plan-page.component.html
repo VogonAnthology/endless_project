@@ -1,0 +1,25 @@
+<div class="choose-plan">
+    <h1>Soumettre votre vidéo</h1>
+  
+    <div class="options">
+      <div #contest class="option-card bg-prim">
+        <h2>Concours de la semaine</h2>
+        <p>
+          Participez à notre concours hebdomadaire ! La vidéo qui obtiendra le plus de
+          likes sera sélectionnée. Soumettez votre vidéo gratuitement et tentez votre
+          chance pour gagner.
+        </p>
+        <button class="gradient-background" (click)="submitForContest()">Participer au concours</button>
+      </div>
+  
+      <div #payment class="option-card bg-prim">
+        <h2>Soumission directe</h2>
+        <p>
+          Pour seulement 10 $, vous pouvez soumettre directement votre vidéo et la
+          faire ajouter sans passer par le concours.
+        </p>
+        <button class="gradient-background" (click)="submitWithPayment()">Payer 10 $ et soumettre</button>
+      </div>
+    </div>
+  </div>
+  
