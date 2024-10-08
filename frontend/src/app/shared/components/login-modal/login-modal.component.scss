@@ -42,3 +42,7 @@
 .mat-mdc-dialog-surface {
   background-color: var(--background-secondary-color);
 }
+
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, .80);
+}

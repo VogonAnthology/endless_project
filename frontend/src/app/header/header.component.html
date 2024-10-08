@@ -1,28 +1,22 @@
 <header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">
-          <!-- <img src="path/to/icon.png" alt="Icon" style="width: 30px; height: 30px;"> -->
-          The Endless Video Project
-        </a>
-      </div>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]='["/home-page"]'>Home</a>
+      <div class="ms-lg-3 collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav w-100">
+          <li class="nav-item" routerLinkActive="gradient-text">
+            <a class="nav-link" [routerLink]='["/home-page"]'>OneTube</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+          <li class="nav-item" routerLinkActive="gradient-text">
+            <a class="nav-link" [routerLink]="['/test']">Weekly contests</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/contribute-home-page']">Contribute</a>
+          <li class="nav-item ms-auto">
+            <!-- <a class="nav-link gradient-outline bg-prim" [routerLink]="['/upload-video-page']">Weekly contest</a>  -->
+            <button class="gradient-outline bg-prim" [routerLink]="['/upload-video-page']">
+              <span>Participate 🔥</span> 
+             </button>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Explore</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Log in</a>
+          <li class="nav-item mx-lg-3 " routerLinkActive="gradient-text">
+            <a class="nav-link fs-6 fw-medium" (click)="openLoginModal()">Log in</a>
           </li>
         </ul>
       </div>

@@ -1,0 +1,9 @@
+<div class="d-flex align-items-center" [class.justify-content-center]="centered">
+
+  <div class="progress-container me-2" [class.disabled]="disabled" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+    [attr.aria-valuenow]="amountPercent">
+    <div class="progress-bar" [style.width.%]="amountPercent">
+    </div>
+  </div>
+  <p class="mb-0">{{ disabled ? "?" : amount }} {{ unitName }}</p>
+</div>

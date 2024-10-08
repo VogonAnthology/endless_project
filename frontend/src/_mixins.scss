@@ -1,5 +1,8 @@
-@mixin full-height-minus-header($header-height) {
+@mixin full-height-minus-header($header-height, $max-height) {
     height: calc(100vh - #{$header-height});
+    @if $max-height {
+      max-height: calc(100vh - #{$header-height});
+    }
   }
 
 @mixin gradient-outline($background-color) {

@@ -1,6 +1,6 @@
 :root {
-  --header-height-large: 0px;
-  --header-height-small: 0px;
+  --header-height-large: 72px;
+  --header-height-small: 41.6px;
 
   --xs: 0.5rem;
   --sm: 0.85rem;
@@ -24,6 +24,11 @@
   --background-secondary-color: #303030;
   --button-primary-hover-color: #2f2f2f;
   --button-secondary-hover-color: #3c3c3c;
+
+  --border-primary-color: #4f4f4f;
+  --border-secondary-color: #333333;
+
+  
   --electric-violet: oklch(53.18% 0.28 296.97);
   --vivid-pink: oklch(69.02% 0.277 332.77);
   --orange-red: oklch(63.32% 0.24 31.68);
@@ -74,8 +79,5 @@
       var(--vivid-pink-transparent) 50%,
       var(--electric-violet-transparent) 100%
     );
-
-  --primary-gradient: linear-gradient(to right, orange,red,purple,blue,);
-  --secondary-gradient: linear-gradient(to right, red, blue, );
 }
 

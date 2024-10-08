@@ -105,9 +105,19 @@ export class VjsPlayerComponent implements OnDestroy, AfterViewInit {
     return this.target.nativeElement;
   }
 
-  ngOnDestroy() {
+  updateSources(newSources: { src: string; type: string }[]) {
     if (this.player) {
-      this.player.dispose();
+      this.player.src(newSources);
+      this.player.load();
     }
+  }
+
+  ngOnDestroy() {
+    // Used timout to trigger after the end of slide animation
+    setTimeout(() => {
+      if (this.player) {
+        this.player.dispose();
+      }
+    }, 1000);
   }
 }

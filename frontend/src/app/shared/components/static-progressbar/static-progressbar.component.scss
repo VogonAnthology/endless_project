@@ -1,0 +1,27 @@
+.progress-container {
+    width: 50%;
+    background-color: #e0e0e0; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    height: 8px; 
+    position: relative;
+    transition: opacity 0.4s ease;
+  }
+
+.progress-container.disabled {
+    opacity: 0.2;
+}
+  
+  
+  .progress-bar {
+    height: 100%;
+    background: var(--red-to-pink-to-purple-horizontal-gradient); 
+    border-radius: 10px 0 0 10px; 
+    text-align: center;
+    color: white; 
+    transition: width 0.4s ease; 
+  }
+  
+  p {
+    padding-bottom: 5px;
+  }

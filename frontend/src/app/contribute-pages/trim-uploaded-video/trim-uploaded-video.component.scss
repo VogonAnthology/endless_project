@@ -1,5 +1,5 @@
 .video-editor-container {
-  background-color: #242424;
+  background-color: #121212;
 
   .video-player-container {
     max-width: 696px;
@@ -30,7 +30,7 @@
   }
 
   .infos-actions-column-container {
-    background-color: #383838;
+    background-color: var(--background-color);
   }
 
   .timeline-container {
@@ -41,7 +41,7 @@
     width: 100%;
     position: relative;
     padding: 0 3rem 3rem 3rem;
-    background-color: #5d5d5d;
+    background-color: #1c1c1c;
   }
 
   .timeline-progressline-container {
@@ -257,11 +257,6 @@
       background-color: rgb(129, 101, 14); // Slightly darker on hover
     }
   }
-}
-
-hr {
-  border: 1px solid rgba(255, 255, 255, 0.2); // Subtle separator
-  margin: 1rem 0;
 }
 
 p {

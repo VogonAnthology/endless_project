@@ -1,9 +1,9 @@
 import { NgFor } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { VideoPreview } from '../../../schemas/video-preview.schema';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { StringFormat } from '../../utils/string-format';
+import { StringFormat } from '../../shared/utils/string-format';
+import { VideoPreview } from '../../schemas/video-preview.schema';
 
 @Component({
   selector: 'app-video-preview-card',

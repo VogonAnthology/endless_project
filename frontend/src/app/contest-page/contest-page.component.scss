@@ -1,0 +1,58 @@
+.fullscreen-container {
+    overflow: hidden;
+
+    .rounded-container {
+        @media (min-width: 768px) {
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+    }
+
+    h4 {
+        margin: 0;
+    }
+
+    button.p-small {
+        padding: 0.5rem;
+    }
+
+    .video-text {
+        margin: 0 0 4px 0;
+        font-family: "Roboto", "Arial", sans-serif;
+        color: var(--text-secondary-color);
+        font-size: var(--md);
+        line-height: 1.2rem;
+        font-weight: 400;
+        overflow: hidden;
+        display: block;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        display: box;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        word-break: break-word;
+        white-space: normal;
+    }
+    
+    .video-title {
+        margin: 0 0 4px 0;
+        font-family: "Roboto", "Arial", sans-serif;
+        font-size: var(--lg);
+        line-height: 1.4rem;
+        font-weight: 500;
+        overflow: hidden;
+        display: block;
+        max-height: 3rem;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        display: box;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        word-break: break-word;
+        white-space: normal;
+    }
+    
+}
+

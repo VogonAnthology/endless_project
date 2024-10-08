@@ -1,0 +1,34 @@
+.navbar {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.nav-item {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+
+  .nav-link {
+    font-size: var(--lg);
+  }
+}
+
+
+.nav-item.gradient-text {
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        bottom: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 3px;
+        z-index: 1;
+        background: var(--red-to-pink-to-purple-horizontal-gradient);
+    }
+
+    .nav-link {
+        font-weight: 700;
+    }
+}

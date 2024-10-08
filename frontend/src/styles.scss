@@ -1,9 +1,21 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'globals';
 @import 'mixins';
+
+.text-color-primary {
+  color: var(--text-primary-color);
+}
+
+.text-color-secondary {
+  color: var(--text-secondary-color);
+}
+
 html {
   font-family: Roboto, Arial, sans-serif;
   color: var(--text-primary-color);
+}
+body {
+  background-color: var(--background-color);
 }
 
 p {
@@ -32,11 +44,13 @@ h3 {
 
 h4 {
   font-size: var(--lg);
+  color: var(--text-primary-color);
   font-weight: 400;
 }
 
 h5 {
   font-size: var(--md);
+  color: var(--text-primary-color);
   font-weight: 300;
 }
 
@@ -51,10 +65,30 @@ button {
   &:hover {
     transition: all ease 0.3s !important;
   }
+
+  span {
+    width: 100%;
+    overflow: hidden;
+    display: block;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    display: box;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    white-space: normal;
+  }
 }
 
-
-
+.btn-outline {
+  color: var(--text-primary-color);
+  border: 2px solid var(--border-primary-color);
+  background-color: transparent;
+  &:hover {
+    background-color: var(--background-secondary-color);
+  }
+}
 
 %gradient-background {
   background:  var(--red-to-pink-to-purple-horizontal-gradient);
@@ -112,10 +146,26 @@ header {
   z-index: 1000;
   
   height: var(--header-height-large);
+  background-color: var(--background-color);
+  // border-bottom: 1px solid var(--border-primary-color);
+  
+  a.nav-link,a.navbar-brand {
+      color: var(--text-primary-color);
+
+      &:hover {
+        color: var(--text-secondary-color);
+      }
+  }
 
   @media (max-width: 992px) {
     height: var(--header-height-small);
   }
+}
+
+hr {
+  border: 1px solid var(--border-primary-color);
+  margin: 1rem 0;
+  opacity: 1;
 }
 
 html, body { 
@@ -128,7 +178,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 main {
     background-color: var(--background-color);
     width: 100%;
-    @include full-height-minus-header(var(--header-height-large));
+    @include full-height-minus-header(var(--header-height-large), false);
     overflow-y: auto;
     justify-content: center;
     align-items: center;
@@ -136,7 +186,7 @@ main {
     position: relative;
 
     @media (max-width: 992px) {
-      @include full-height-minus-header(var(--header-height-small));
+      @include full-height-minus-header(var(--header-height-small), false);
     }
   }
 
@@ -144,48 +194,17 @@ main {
     overflow: hidden;
   }
 
-  .scroll-container {
-    overflow-y: scroll;
 
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
+.fullscreen-container {
+  @include full-height-minus-header(var(--header-height-large), true);
 
-        /* Style de la barre de défilement principale */
-    &::-webkit-scrollbar {
-      width: 8px; /* Ajustez la largeur de la barre */
-    }
-
-    /* Style du rail de la scrollbar (arrière-plan) */
-    &::-webkit-scrollbar-track {
-      background: transparent; /* Fond transparent */
-      border-radius: 10px; /* Arrondi pour moderniser */
-    }
-
-    /* Style de la poignée de la scrollbar (la partie qui se déplace) */
-    &::-webkit-scrollbar-thumb {
-      background-color: var(--text-secondary-color); /* Couleur gris foncé semi-transparente */
-      border-radius: 10px; /* Arrondir les coins pour un style moderne */
-      border: 2px solid transparent; /* Ajoute un peu de distance entre le rail et le pouce */
-      background-clip: padding-box; /* Assure que la bordure reste visible */
-    }
-
-    /* Style de la poignée au survol */
-    &::-webkit-scrollbar-thumb:hover {
-      background-color: var(--text-primary-color); /* Couleur plus foncée au survol */
-    }
-
-    /* Optionnel: changer la largeur de la scrollbar au survol */
-    &::-webkit-scrollbar:hover {
-      width: 10px; /* Augmente légèrement la largeur au survol */
-    }
-
+  @media (max-width: 992px) {
+    @include full-height-minus-header(var(--header-height-small), true);
   }
+}
 
-  .fullscreen-container {
-    @include full-height-minus-header(var(--header-height-large));
-
-    @media (max-width: 992px) {
-      @include full-height-minus-header(var(--header-height-small));
-    }
+.mobile-scroll {
+  @media (max-width: 992px) {
+    overflow-y: auto;
   }
+}
