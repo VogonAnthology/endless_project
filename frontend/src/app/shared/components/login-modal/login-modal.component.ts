@@ -23,7 +23,7 @@ export class LoginModalComponent {
 
   loginWithGoogle() {
     // Implement Google login here
-    console.log('Login with Google');
+    window.location.href = 'http://localhost:3000/auth/google';
   }
 
   loginWithApple() {
