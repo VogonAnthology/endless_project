@@ -1,0 +1,5 @@
+export enum ContestState {
+  REGISTRATION_OPEN = 'REGISTRATION_OPEN',
+  ON_GOING = 'ON_GOING',
+  FINISHED = 'FINISHED',
+}

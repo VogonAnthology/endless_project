@@ -15,6 +15,7 @@ import {
   imports: [CommonModule],
   templateUrl: './scroll-container.component.html',
   styleUrls: ['./scroll-container.component.scss'],
+  host: { ngSkipHydration: 'true' },
 })
 export class ScrollContainerComponent implements AfterViewInit {
   @Input() contentTemplate!: TemplateRef<any>;

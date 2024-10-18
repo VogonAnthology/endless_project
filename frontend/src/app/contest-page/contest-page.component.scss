@@ -12,6 +12,26 @@
         margin: 0;
     }
 
+
+    button.disabled {
+        cursor: default;
+        // border-color: var(--border-secondary-color);
+
+        &:after {
+            content: '';
+            opacity: 0.7;
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            bottom: -3px;
+            right: -3px;
+            background-color: var(--background-color);
+        }
+        &:hover {
+            background-color: var(--background-color);
+        }
+    }
+
     button.p-small {
         padding: 0.5rem;
     }

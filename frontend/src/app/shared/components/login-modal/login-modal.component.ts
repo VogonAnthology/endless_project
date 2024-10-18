@@ -22,7 +22,6 @@ export class LoginModalComponent {
   }
 
   loginWithGoogle() {
-    // Implement Google login here
     window.location.href = 'http://localhost:3000/auth/google';
   }
 

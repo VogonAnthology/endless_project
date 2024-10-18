@@ -1,14 +1,16 @@
 export interface VideoPreview {
   uuid: string;
-  thumbnail: string;
-  contributor: string;
   uploadDate: Date;
+  thumbnail: string;
   views: number;
+  contributor: string;
   link: string;
-  title?: string;
-  description?: string;
-  likes?: number;
-  votes?: number;
+  votes: number;
+  title: string;
+  description: string;
+  fileName?: string;
+  votesCount?: number;
   votePercent?: number;
   isPlayed?: boolean;
+  likes?: number;
 }

@@ -5,22 +5,28 @@ import { UploadVideoPageComponent } from './contribute-pages/upload-video-page/u
 import { FinishUploadConfirmationPageComponent } from './contribute-pages/finish-upload-confirmation-page/finish-upload-confirmation-page.component';
 import { TestPageComponent } from './test-page/test-page.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
+import { ContestPageComponent } from './contest-page/contest-page.component';
 
 export const routes: Routes = [
   { path: 'welcome-page', component: WelcomePageComponent },
   {
     path: 'home-page',
     component: HomePageComponent,
-    data: { animation: 'HomePage' },
+    // data: { animation: 'HomePage' },
   },
   {
     path: 'upload-video-page',
     component: UploadVideoPageComponent,
-    data: { animation: 'UploadVideoPage' },
+    // data: { animation: 'UploadVideoPage' },
   },
   {
     path: 'finish-upload-confirmation-page',
     component: FinishUploadConfirmationPageComponent,
+  },
+  {
+    path: 'contest/:id',
+    component: ContestPageComponent,
+    // data: { animation: 'ContestPage' },
   },
   { path: 'test', component: TestPageComponent },
   { path: '', redirectTo: '/home-page', pathMatch: 'full' },

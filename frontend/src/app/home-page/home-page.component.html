@@ -2,8 +2,8 @@
   <div class="fullscreen-container pt-lg-3 pt-1 px-lg-3">
     <div class="first-column col-lg-7 d-flex flex-column justify-content-around">
       <app-vjs-player [sources]="[{
-          src: 'https://www.w3schools.com/tags/mov_bbb.mp4',
-          type: 'video/mp4'
+          src: 'http://localhost:3000/uploads/hls/playlists/onetube-videos/onetube.m3u8',
+          type: 'application/x-mpegURL'
         }]" [autoplay]="true" class="w-100 rounded-container"></app-vjs-player>
       <div class="row flex-grow-1 title-text mt-2 align-items-center">
         <div class="col d-flex flex-column justify-content-around align-items-center">

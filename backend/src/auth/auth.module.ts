@@ -11,11 +11,14 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshJwtStrategy } from './strategies/refresh.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/role.guard';
+import { UserModule } from 'src/user/user.module';
+import { AnonymousStrategy } from './strategies/anonymous.strategy';
+import { AuthGuard } from '@nestjs/passport';
 
 @Module({
   imports: [
+    UserModule,
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     ConfigModule.forFeature(refreshJwtConfig),
@@ -26,12 +29,13 @@ import { RolesGuard } from './guards/role.guard';
     GoogleStrategy,
     AuthService,
     LocalStrategy,
+    AnonymousStrategy,
     JwtStrategy,
     RefreshJwtStrategy,
     GoogleStrategy,
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard, //@UseGuards(JwtAuthGuard) applied on all API endppints
+      useClass: AuthGuard(['jwt', 'anonymous']),
     },
     {
       provide: APP_GUARD,

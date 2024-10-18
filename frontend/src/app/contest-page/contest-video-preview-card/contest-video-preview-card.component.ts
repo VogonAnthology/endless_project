@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { VideoPreview } from '../../schemas/video-preview.schema';
-import { StringFormat } from '../../shared/utils/string-format';
 import { StaticProgressbarComponent } from '../../shared/components/static-progressbar/static-progressbar.component';
+import { ContestingVideo } from '../../models/contesting-video.class';
 
 @Component({
   selector: 'app-contest-video-preview-card',
@@ -11,17 +10,11 @@ import { StaticProgressbarComponent } from '../../shared/components/static-progr
   styleUrl: './contest-video-preview-card.component.scss',
 })
 export class ContestVideoPreviewCardComponent {
-  @Input({ required: true }) video!: VideoPreview;
-  timeSinceUpload: string = '1h';
-  @Output() videoSelected = new EventEmitter<string>();
+  @Input({ required: true }) video!: ContestingVideo;
+  @Input({ required: true }) showVotes!: boolean;
+  @Output() videoSelected = new EventEmitter<number>();
 
   onCardClick() {
-    this.videoSelected.emit(this.video.uuid);
-  }
-
-  ngOnInit(): void {
-    this.timeSinceUpload = StringFormat.getTimeSinceString(
-      this.video.uploadDate
-    );
+    this.videoSelected.emit(this.video.id);
   }
 }

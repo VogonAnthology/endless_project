@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 })
 export class StaticProgressbarComponent {
   @Input() amount: number = 0;
-  @Input({ required: true }) disabled: boolean = true;
+  @Input() disabled: boolean = true;
   @Input() amountPercent: number = 0;
   @Input({ required: true }) unitName!: string;
   @Input() centered: boolean = false;

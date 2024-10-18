@@ -14,14 +14,26 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private authService: AuthService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        // Deux extracteurs de token JWT, un pour le ssr et un pour le csr
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+        (request) => {
+          console.log('request.cookies', request.cookies);
+          let token = null;
+          if (request && request.cookies) {
+            token = request.cookies['accessToken'];
+          }
+          return token;
+        },
+      ]),
       secretOrKey: jwtConfiguration.secret,
       ignoreExpiration: false,
     });
   }
 
-  validate(payload: AuthJwtPayload) {
+  async validate(payload: AuthJwtPayload) {
     const userId = payload.sub;
-    return this.authService.validateJwtUser(userId);
+    const user = await this.authService.validateJwtUser(userId);
+    return user;
   }
 }

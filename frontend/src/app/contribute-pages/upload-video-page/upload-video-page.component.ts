@@ -17,6 +17,7 @@ import { StringFormat } from '../../shared/utils/string-format';
   imports: [MatIconModule],
   templateUrl: './upload-video-page.component.html',
   styleUrl: './upload-video-page.component.scss',
+  host: { ngSkipHydration: 'true' },
 })
 export class UploadVideoPageComponent implements OnInit {
   @ViewChild('videoThumbnailCanvas')

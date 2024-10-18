@@ -599,7 +599,9 @@ export class TrimUploadedVideoComponent implements OnInit, OnDestroy {
   }
 
   listenToProgress() {
-    this.eventSource = new EventSource('http://localhost:3000/video/progress');
+    this.eventSource = new EventSource(
+      'http://localhost:3000/contesting-video/progress'
+    );
     this.eventSource.addEventListener('progress', (event: any) => {
       const progressData = JSON.parse(event.data);
       console.log('Progress:', progressData);

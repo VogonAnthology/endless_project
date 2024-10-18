@@ -1,8 +1,8 @@
 <div class="d-flex flex-row w-100 mb-3 me-5" (click)="onCardClick()" style="cursor: pointer;">
   <div class="me-1 position-relative">
-    <img class="rounded video-thumbnail" src={{video.thumbnail}} height="94px" width="168px" alt="...">
+    <img class="rounded video-thumbnail" src="http://localhost:3000/thumbnails/{{video.fileName}}"  height="94px" width="168px" alt="...">
 
-    @if (video.isPlayed) {
+    @if (video.isAlreadyPlayed) {
     <div class="replay-overlay d-flex justify-content-center align-items-center">
       <img src="assets/icons/replay.svg" alt="Replay Icon" class="replay-icon">
     </div>
@@ -13,6 +13,6 @@
     <p class="video-title">{{video.title}}</p>
     <p class="video-text">{{video.description}}</p>
     <!-- <p class="video-text">{{video.likes}} likes • {{timeSinceUpload}}</p> -->
-    <app-static-progressbar class="col-12 col-lg-8" [disabled]="(video.votes != undefined) ? false : true " [amount]="video.votes ?? 0" [amountPercent]="video.votePercent ?? 0" [unitName]="'votes'"></app-static-progressbar>
+    <app-static-progressbar class="col-12 col-lg-8" [disabled]="!showVotes" [amount]="video.votesCount ?? 0" [amountPercent]="video.votePercent ?? 0" [unitName]="'votes'"></app-static-progressbar>
   </div>
 </div>

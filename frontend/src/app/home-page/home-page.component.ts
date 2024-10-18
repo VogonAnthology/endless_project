@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { VjsPlayerComponent } from '../vjs-player/vjs-player.component';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,7 @@ import { VideoPreviewCardComponent } from './video-preview-card/video-preview-ca
 import { ScrollContainerComponent } from '../shared/components/scroll-container/scroll-container.component';
 import { CommonModule } from '@angular/common';
 import { VideoPreview } from '../schemas/video-preview.schema';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home-page',
@@ -27,7 +28,8 @@ export class HomePageComponent {
   seconds: number;
   contributorsCount: number;
   videos: Array<VideoPreview> = [];
-  constructor() {
+
+  constructor(private readonly authService: AuthService) {
     this.hours = 2;
     this.minutes = 30;
     this.seconds = 15;

@@ -2,16 +2,17 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Inject,
   Input,
   OnDestroy,
-  OnInit,
+  PLATFORM_ID,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { create } from 'domain';
 import videojs from 'video.js';
 import Player from 'video.js/dist/types/player';
 import { createTitleBar, TitleBar } from './custom-components';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 // Custom Title Component
 
@@ -21,6 +22,7 @@ import { createTitleBar, TitleBar } from './custom-components';
   templateUrl: './vjs-player.component.html',
   styleUrl: './vjs-player.component.scss',
   encapsulation: ViewEncapsulation.None,
+  host: { ngSkipHydration: 'true' },
 })
 export class VjsPlayerComponent implements OnDestroy, AfterViewInit {
   @ViewChild('target', { static: true })
@@ -39,15 +41,21 @@ export class VjsPlayerComponent implements OnDestroy, AfterViewInit {
   @Input() onTimeUpdate: (player: Player) => void | null = () => {};
   @Input() manualInit: boolean = false;
   @Input() customPlayer: boolean = false;
+  initialized = false;
 
   player!: Player;
   titleBar: TitleBar | null = null;
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
   ngAfterViewInit(): void {
-    if (!this.manualInit) {
-      this.initializePlayer();
+    if (isPlatformBrowser(this.platformId)) {
+      if (!this.manualInit) {
+        this.initializePlayer();
+      }
     }
   }
+
   public initializePlayer() {
     this.player = videojs(this.target.nativeElement, {
       aspectRatio: this.aspectRatio,
@@ -63,9 +71,10 @@ export class VjsPlayerComponent implements OnDestroy, AfterViewInit {
 
   private addListeners() {
     if (this.onLoadedMetadata)
-      this.player.on('loadedmetadata', () =>
-        this.onLoadedMetadata(this.player)
-      );
+      this.player.on('loadedmetadata', () => {
+        this.initialized = true;
+        this.onLoadedMetadata(this.player);
+      });
     if (this.onPlay) this.player.on('play', () => this.onPlay(this.player));
     if (this.onPause) this.player.on('pause', () => this.onPause(this.player));
     if (this.onEnded) this.player.on('ended', () => this.onEnded(this.player));
@@ -106,9 +115,18 @@ export class VjsPlayerComponent implements OnDestroy, AfterViewInit {
   }
 
   updateSources(newSources: { src: string; type: string }[]) {
-    if (this.player) {
-      this.player.src(newSources);
-      this.player.load();
+    if (isPlatformBrowser(this.platformId)) {
+      const pathPrefix =
+        'http://localhost:3000/uploads/hls/playlists/contesting-videos/' +
+        newSources[0].src +
+        '/' +
+        newSources[0].src +
+        '.m3u8';
+      newSources[0].src = pathPrefix;
+      if (this.player) {
+        this.player.src(newSources);
+        this.player.load();
+      }
     }
   }
 
